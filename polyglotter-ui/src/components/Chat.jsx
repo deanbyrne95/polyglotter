@@ -4,9 +4,9 @@ import {
   AttachFile,
   MoreVert,
   SearchOutlined,
-  InsertEmoticon,
 } from "@mui/icons-material";
-import MicIcon from "@mui/icons-material/Mic";
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import MicIcon from '@mui/icons-material/Mic';
 import axios from "./axios";
 
 import "./Chat.css";
@@ -62,7 +62,7 @@ const Chat = ({ messages }) => {
         ))}
       </div>
       <div className="chat__footer">
-        <InsertEmoticon />
+        <InsertEmoticonIcon />
         <form>
           <input
             placeholder="Type a message"
