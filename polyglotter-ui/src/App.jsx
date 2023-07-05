@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Pusher from "pusher-js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import axios from "./components/axios";
 
 import "./App.css";
 
@@ -30,6 +32,30 @@ import Chat from "./components/Chat";
 // ]);
 
 const App = () => {
+  const pusherApiKey = import.meta.env.VITE_APP_PUSHER_API_KEY;
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    axios.get("/messages/sync").then((res) => {
+      setMessages(res.data);
+    });
+  }, []);
+
+  useEffect(() => {
+    const pusher = new Pusher(pusherApiKey, {
+      cluster: "ap2",
+    });
+    const channel = pusher.subscribe("messages");
+    channel.bind("inserted", (data) => {
+      setMessages([...messages, data]);
+    });
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, [messages]);
+  console.log(messages);
+
   return (
     <main className="app">
       {/* <div className="relative w-full h-[100%] mx-auto bg-gradient-to-br from-tertiary to-secondary">
@@ -40,7 +66,7 @@ const App = () => {
             </div> */}
       <div className="app__body">
         <Sidebar />
-        <Chat />
+        <Chat messages={messages} />
       </div>
     </main>
   );
