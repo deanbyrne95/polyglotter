@@ -16,11 +16,15 @@ router
     .get(messageController.listAllMessages)
 
 router
-    .route('/messages/:name')
+    .route('/messages/:name/all')
     .get(messageController.listMessagesForUser)
 
 router
-    .route('/message')
+    .route('/messages/sync')
+    .get(messageController.syncMessages)
+
+router
+    .route('/message/new')
     .post(messageController.sendMessage)
 
 router

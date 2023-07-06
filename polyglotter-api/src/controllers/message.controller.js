@@ -45,21 +45,21 @@ const sendMessage = async (request, response) => {
         .catch((error) => {
             response.status(500).send(error);
         })
-    /*try {
-        const results = await message.aggregate([
-            {
-                $limit: 10
-            }
-        ]);
-        return response.status(200).json(results)
-    } catch (err) {
-        console.error(err);
-        return response.status(404).json(err)
-    }*/
+}
+
+const syncMessages = async (request, response) => {
+    MessageModel.find()
+        .then((data) => {
+            response.status(200).send(data);
+        })
+        .catch((error) => {
+            response.status(500).send(error);
+        })
 }
 
 export default {
     listAllMessages,
     listMessagesForUser,
+    syncMessages,
     sendMessage
 }
