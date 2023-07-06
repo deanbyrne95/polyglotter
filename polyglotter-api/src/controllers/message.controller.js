@@ -50,7 +50,7 @@ const sendMessage = async (request, response) => {
 const syncMessages = async (request, response) => {
     MessageModel.find()
         .then((data) => {
-            response.status(201).send(data);
+            response.status(200).send(data);
         })
         .catch((error) => {
             response.status(500).send(error);
