@@ -1,32 +1,33 @@
 import { useEffect, useState } from "react";
 import { Avatar, IconButton } from "@mui/material";
-import {
-  AttachFile,
-  MoreVert,
-  SearchOutlined,
-} from "@mui/icons-material";
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import MicIcon from '@mui/icons-material/Mic';
+import { AttachFile, MoreVert, SearchOutlined } from "@mui/icons-material";
+import InsertEmoticonIcon from "@mui/icons-material/InsertEmoticon";
+import MicIcon from "@mui/icons-material/Mic";
 import axios from "./axios";
 
+import { useStateValue } from "./StateProvider";
 import "./Chat.css";
 
 const Chat = ({ messages }) => {
   const [seed, setSeed] = useState("");
   const [input, setInput] = useState("");
+  const [{ user }, dispatch] = useStateValue();
+
   const sendMessage = async (e) => {
     e.preventDefault();
     await axios.post("/messages/new", {
       message: input,
-      name: "thewebdev",
+      name: user.displayName,
       timestamp: new Date().toUTCString(),
       received: true,
     });
     setInput("");
   };
+
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
   }, []);
+
   return (
     <div className="chat">
       <div className="chat__header">
@@ -35,8 +36,8 @@ const Chat = ({ messages }) => {
  b${seed}.svg`}
         />
         <div className="chat__headerInfo">
-          <h3>Room Name</h3>
-          <p>Last seen at...</p>
+          <h3>Dev Help</h3>
+          <p>Last seen at {messages[messages.length - 1]?.timestamp}</p>
         </div>
         <div className="chat__headerRight">
           <IconButton>
@@ -53,7 +54,9 @@ const Chat = ({ messages }) => {
       <div className="chat__body">
         {messages.map((message) => (
           <p
-            className={`chat__message ${message.received && "chat__receiver"}`}
+            className={`chat__message ${
+              message.name === user.displayName && "chat__receiver"
+            }`}
           >
             <span className="chat__name">{message.name}</span>
             {message.message}
@@ -70,7 +73,9 @@ const Chat = ({ messages }) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <button type="submit" onClick={sendMessage} >Send a message</button>
+          <button type="submit" onClick={sendMessage}>
+            Send a message
+          </button>
         </form>
         <MicIcon />
       </div>

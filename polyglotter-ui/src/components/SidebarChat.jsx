@@ -3,7 +3,7 @@ import { Avatar } from "@mui/material";
 
 import "./SidebarChat.css";
 
-const SidebarChat = () => {
+const SidebarChat = ({ messages }) => {
   const [seed, setSeed] = useState("");
   useEffect(() => {
     setSeed(Math.floor(Math.random() * 5000));
@@ -16,8 +16,8 @@ const SidebarChat = () => {
 b${seed}.svg`}
       />
       <div className="sidebarChat__info">
-        <h2>Room name</h2>
-        <p>Last message...</p>
+        <h2>Dev Help</h2>
+        <p>{messages[messages.length -1]?.message}</p>
       </div>
     </div>
   );
