@@ -4,9 +4,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import axios from "./components/axios";
 
 import "./App.css";
-
+import { useStateValue } from './components/StateProvider';
 import Sidebar from "./components/Sidebar";
 import Chat from "./components/Chat";
+import Login from "./components/Login";
 // import Register from "./pages/Register";
 // import Login from "./pages/Login";
 // import PageNotFound from "./pages/PageNotFound";
@@ -34,6 +35,7 @@ import Chat from "./components/Chat";
 const App = () => {
   const pusherApiKey = import.meta.env.VITE_APP_PUSHER_API_KEY;
   const [messages, setMessages] = useState([]);
+  const [{ user }, dispatch] = useStateValue()
 
   useEffect(() => {
     axios.get("/messages/sync").then((res) => {
@@ -64,10 +66,14 @@ const App = () => {
             <div className="bg-primary bottom-[0px] fixed min-w-full">
                 <Footer />
             </div> */}
-      <div className="app__body">
-        <Sidebar />
-        <Chat messages={messages} />
-      </div>
+      {!user ? (
+        <Login />
+      ) : (
+        <div className="app__body">
+          <Sidebar />
+          <Chat messages={messages} />
+        </div>
+      )}
     </main>
   );
 };
