@@ -24,7 +24,7 @@ router
     .get(messageController.syncMessages)
 
 router
-    .route('/message/new')
+    .route('/messages/new')
     .post(messageController.sendMessage)
 
 router
