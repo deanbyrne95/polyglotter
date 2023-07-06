@@ -17,7 +17,7 @@ const Chat = ({ messages }) => {
     e.preventDefault();
     await axios.post("/messages/new", {
       message: input,
-      name: user.displayName,
+      name: user?.displayName,
       timestamp: new Date().toUTCString(),
       received: true,
     });
@@ -55,7 +55,7 @@ const Chat = ({ messages }) => {
         {messages.map((message) => (
           <p
             className={`chat__message ${
-              message.name === user.displayName && "chat__receiver"
+              message.name === user?.displayName && "chat__receiver"
             }`}
           >
             <span className="chat__name">{message.name}</span>
