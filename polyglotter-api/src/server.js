@@ -4,11 +4,11 @@ import routes from "./routes/main.router.js";
 import http from "http";
 import createError from "http-errors";
 import Cors from 'cors'
+import {env} from "./config/env.config.js";
 
 // App Config
-
 const app = express();
-const port = normalizePort(process.env.PORT || 3000);
+const port = normalizePort(env.PORT || 3000);
 
 // Middleware
 // TODO: Insert Middleware
