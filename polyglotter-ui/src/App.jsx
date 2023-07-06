@@ -6,7 +6,7 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Chat from "./components/Chat";
 import Login from "./components/Login";
-import {firebase} from "./firebase.js";
+import {useStateValue} from "./components/StateProvider.jsx";
 // import Register from "./pages/Register";
 // import Login from "./pages/Login";
 // import PageNotFound from "./pages/PageNotFound";
@@ -34,18 +34,12 @@ import {firebase} from "./firebase.js";
 const App = () => {
     const pusherApiKey = import.meta.env.VITE_APP_PUSHER_API_KEY;
     const [messages, setMessages] = useState([]);
-    const [user, setUser] = useState(null);
+    const [{user}, setUser] = useStateValue();
 
     useEffect(() => {
         axios.get("/messages/sync").then((res) => {
             setMessages(res.data);
         });
-    }, []);
-
-    useEffect(() => {
-        firebase.auth().onAuthStateChanged(user => {
-            setUser(user);
-        })
     }, []);
 
     console.log(user);

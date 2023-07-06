@@ -2,8 +2,10 @@ import {Button} from "@mui/material";
 import "./Login.css";
 
 import {signInWithGoogle} from '../firebase.js'
+import {useStateValue} from "./StateProvider.jsx";
 
 const Login = () => {
+    const [{}, dispatch] = useStateValue();
     return (
         <div className="login">
             <div className="login__container">
@@ -11,7 +13,7 @@ const Login = () => {
                 <div className="login__text">
                     <h1>Sign in to Messaging App</h1>
                 </div>
-                <Button onClick={signInWithGoogle}>Sign In with Google</Button>
+                <Button onClick={() => signInWithGoogle(dispatch)}>Sign In with Google</Button>
             </div>
         </div>
     );
