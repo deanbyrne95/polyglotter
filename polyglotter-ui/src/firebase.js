@@ -1,8 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-import { getStorage } from "firebase/storage";
-import { getDatabase } from "firebase/database";
-import { getFirestore } from "firebase/firestore";
+import firebase from "firebase/compat/app";
+import 'firebase/compat/auth';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_APP_FIREBASE_apiKey,
@@ -14,22 +11,17 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_APP_FIREBASE_measurementId,
 };
 
+
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication and get a reference to the service
-const auth = getAuth(app);
+export const auth = firebase.auth();
 
-// Initialize Cloud Storage and get a reference to the service
-const storage = getStorage(app);
+const provider = new firebase.auth.GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
 
-// Initialize Realtime Database and get a reference to the service
-const database = getDatabase(app);
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
 
-// Initialize Cloud Firestore and get a reference to the service
-const db = getFirestore(app);
 
-const provider = new GoogleAuthProvider();
-
-export { auth, provider, database };
-export default db;
+export { firebase, provider };
+export default firebase;
