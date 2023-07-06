@@ -14,7 +14,7 @@ const Sidebar = ({ messages }) => {
   return (
     <div className="sidebar">
       <div className="sidebar__header">
-        <Avatar src={user?.photoURL}/>
+        <Avatar src={user?.photoURL} imgProps={{referrerPolicy: 'no-referrer'}}/>
         <div className="sidebar__headerRight">
           <IconButton>
             <DonutLargeIcon />
