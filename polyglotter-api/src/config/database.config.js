@@ -30,7 +30,6 @@ const databaseOpened = () => {
     const msgCollection = mongoose.connection.collection("messages");
     const changeStream = msgCollection.watch();
     changeStream.on('change', change => {
-        console.log(change);
         if (change.operationType === 'insert') {
             const messageDetails = change.fullDocument;
             pusher.trigger('messages', 'inserted', {

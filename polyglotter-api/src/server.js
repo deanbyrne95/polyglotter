@@ -66,7 +66,7 @@ function onError(error) {
     const bind = typeof port === 'string'
         ? 'Pipe ' + port
         : 'Port ' + port;
-    console.log(error)
+    console.error(error)
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
