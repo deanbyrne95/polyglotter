@@ -6,7 +6,8 @@ import "./App.css";
 import Sidebar from "./components/Sidebar";
 import Chat from "./components/Chat";
 import Login from "./components/Login";
-import {useStateValue} from "./components/StateProvider.jsx";
+import {firebaseApp} from "./firebase.js";
+import dayjs from "dayjs";
 // import Register from "./pages/Register";
 // import Login from "./pages/Login";
 // import PageNotFound from "./pages/PageNotFound";
@@ -31,10 +32,14 @@ import {useStateValue} from "./components/StateProvider.jsx";
 //     },
 // ]);
 
+export function formatDate(date, format) {
+    return dayjs(date).format(format);
+}
+
 const App = () => {
     const pusherApiKey = import.meta.env.VITE_APP_PUSHER_API_KEY;
     const [messages, setMessages] = useState([]);
-    const [{user}, setUser] = useStateValue();
+    const [user, setUser] = useState(null);
 
     useEffect(() => {
         axios.get("/messages/sync").then((res) => {
@@ -42,11 +47,9 @@ const App = () => {
         });
     }, []);
 
-    console.log(user);
-
     useEffect(() => {
         const pusher = new Pusher(pusherApiKey, {
-            cluster: "ap2",
+            cluster: import.meta.env.VITE_APP_PUSHER_CLUSTER,
         });
         const channel = pusher.subscribe("messages");
         channel.bind("inserted", (data) => {
@@ -57,7 +60,14 @@ const App = () => {
             channel.unsubscribe();
         };
     }, [messages]);
-    console.log(messages);
+
+    useEffect(() => {
+        if (!user) {
+            firebaseApp.auth().onAuthStateChanged(user => {
+                setUser(user)
+            });
+        }
+    }, []);
 
     return (
         <main className="app">
@@ -71,8 +81,8 @@ const App = () => {
                 <Login/>
             ) : (
                 <div className="app__body">
-                    <Sidebar messages={messages}/>
-                    <Chat messages={messages}/>
+                    <Sidebar messages={messages} user={user}/>
+                    <Chat messages={messages} user={user}/>
                 </div>
             )}
         </main>
