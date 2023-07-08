@@ -15,25 +15,11 @@ const firebaseConfig = {
 
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+export const firebaseApp = firebase.initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
+export const auth = firebaseApp.auth();
 
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.setCustomParameters({prompt: 'select_account'});
 
-export const signInWithGoogle = (dispatch) => {
-    auth.signInWithPopup(provider)
-        .then(result => {
-            console.log('Inside result')
-            dispatch({
-                type: actionTypes.SET_USER,
-                user: result.user
-            })
-        })
-        .catch(error => console.error(`Error! ${error.message}`))
-};
-
-
-export {firebase, provider};
-export default firebase;
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
